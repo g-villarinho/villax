@@ -4,8 +4,8 @@
             "@babel/preset-react",
             {
                 "runtime": "classic",
-                "pragma": "Didact.createElement",
-                "pragmaFrag": "Didact.Fragment"
+                "pragma": "Villax.createElement",
+                "pragmaFrag": "Villax.Fragment"
             }
         ]
     ]
