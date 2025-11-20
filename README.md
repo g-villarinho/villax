@@ -87,7 +87,12 @@ Este projeto é estritamente para estudo pessoal, mas sugestões de melhoria con
 3. Proposta de solução ou recurso.
 
 ## Licença
-Uso educacional. (Defina uma licença formal se quiser distribuir.)
+Este projeto está licenciado sob a **Licença MIT**.
 
----
-Sinta-se livre para ajustar o roadmap conforme avança. Boa exploração! 🚀
+Resumo não oficial:
+- Uso, cópia, modificação, fusão, publicação e distribuição permitidos.
+- É obrigatório manter o aviso de copyright e o texto da licença.
+- Não há garantia; fornecido "no estado em que se encontra".
+
+Consulte o arquivo `LICENSE` para o texto completo.
+
