@@ -1,0 +1,13 @@
+{
+    "name": "villax",
+    "version": "1.0.0",
+    "description": "Playground JSX com runtime custom",
+    "scripts": {
+        "build": "babel index.js --out-file dist/bundle.js --source-maps"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.23.0",
+        "@babel/core": "^7.23.0",
+        "@babel/preset-react": "^7.23.0"
+    }
+}

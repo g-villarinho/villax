@@ -21,3 +21,40 @@ function createTextElement(text) {
         }
     }
 }
+
+function render(element, container) {
+    const dom =
+        element.type === "TEXT_ELEMENT"
+            ? document.createTextNode("")
+            : document.createElement(element.type)
+
+
+    const isProperty = key => key !== "children"
+    Object.keys(element.props)
+        .filter(isProperty)
+        .forEach(name => {
+            dom[name] = element.props[name]
+        })
+
+    element.props.children.forEach(child => {
+        render(child, dom)
+    });
+
+    container.appendChild(dom)
+}
+
+const Villax = {
+    createElement,
+    render
+}
+
+/** @jsx Villax.createElement */
+const element = (
+    <div style="background: blue">
+        <h1>Hello World</h1>
+        <h2 style="text-align:right">from Villax</h2>
+    </div>
+);
+
+const container = document.getElementById("root");
+Villax.render(element, container);
