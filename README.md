@@ -35,7 +35,22 @@ Cada elemento é representado como uma "fiber" que contém:
 - `alternate`: Link para a fiber da renderização anterior
 - `effectTag`: Tipo de mudança (PLACEMENT, UPDATE, DELETION)
 
-## 🚀 Uso
+## 📁 Estrutura do Projeto
+
+```
+villax/
+├── src/
+│   ├── villax.js      # Core da biblioteca (React clone)
+│   └── index.js       # Entry point
+├── examples/
+│   ├── counter.js     # Exemplo com useState
+│   └── todo.js        # Todo App completo
+├── dist/              # Build output
+├── index.html         # HTML principal
+└── DEVELOPMENT.md     # Guia de desenvolvimento
+```
+
+## 🚀 Quick Start
 
 ```bash
 # Instalar dependências
@@ -44,14 +59,28 @@ npm install
 # Compilar o código
 npm run build
 
-# Abrir index.html no navegador
+# Abrir no navegador
 open index.html
+
+# Ou usar servidor local
+npm run dev
+```
+
+## 📝 Scripts Disponíveis
+
+```bash
+npm run build       # Compilar projeto
+npm run build:lib   # Compilar apenas a lib
+npm run watch       # Modo watch
+npm run dev         # Build + servidor
+npm run serve       # Servidor HTTP (porta 8080)
 ```
 
 ## 💻 Exemplo de Código
 
 ```jsx
 /** @jsx Villax.createElement */
+import Villax from './src/villax.js'
 
 function Counter() {
     const [count, setCount] = Villax.useState(0)
@@ -66,8 +95,11 @@ function Counter() {
     )
 }
 
-Villax.render(<Counter />, document.getElementById("root"))
+const container = document.getElementById("root")
+Villax.render(<Counter />, container)
 ```
+
+Veja mais exemplos em [`examples/`](./examples).
 
 ## 📚 O que aprendi
 
@@ -96,22 +128,41 @@ Esta é uma versão didática. O React real inclui:
 - [React Fiber Architecture](https://github.com/acdlite/react-fiber-architecture)
 - [React Documentation](https://react.dev/)
 
+## 🎓 Para Estudar
+
+Este projeto é perfeito para:
+- Entender como o React funciona internamente
+- Aprender sobre Virtual DOM e reconciliation
+- Compreender a arquitetura de Fibers
+- Ver como hooks funcionam "por baixo dos panos"
+- Estudar algoritmos de diff
+
+Leia o [DEVELOPMENT.md](./DEVELOPMENT.md) para um guia completo de desenvolvimento.
+
 ## 🤝 Contribuindo
 
-Este é um projeto educacional. Sinta-se livre para:
-- Adicionar mais hooks (useEffect, useReducer)
-- Implementar reconciliação por keys
-- Adicionar suporte a arrays em children
-- Melhorar o sistema de eventos
-- Adicionar testes
+Este é um projeto educacional. Ideias para contribuir:
+- ✨ Adicionar mais hooks (useEffect, useReducer, useContext)
+- 🔑 Implementar reconciliação por keys
+- 🧩 Adicionar suporte a Fragments
+- ⚡ Otimizar performance
+- 🧪 Adicionar testes
+- 📖 Melhorar documentação
+- 🎨 Criar mais exemplos
 
 ## 📝 Licença
 
-MIT
+MIT - Sinta-se livre para usar este projeto para aprender!
+
+## 🙏 Créditos
+
+Baseado no excelente tutorial ["Build Your Own React"](https://pomb.us/build-your-own-react/) de [Rodrigo Pomber](https://twitter.com/pomber).
 
 ---
 
-Feito com ❤️ para aprender como o React funciona internamente
+**Feito com ❤️ para aprender como o React funciona internamente**
+
+⭐ Se este projeto te ajudou a entender React, considere dar uma estrela!
 
 > ⚠️ Status: **Em desenvolvimento ativo**. Estrutura, API e roadmap podem mudar sem aviso enquanto conceitos são explorados.
 >

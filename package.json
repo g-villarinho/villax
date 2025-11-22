@@ -1,10 +1,25 @@
 {
     "name": "villax",
     "version": "1.0.0",
-    "description": "Playground JSX com runtime custom",
+    "description": "A didactic React implementation - Build your own React from scratch",
+    "main": "src/villax.js",
     "scripts": {
-        "build": "babel index.js --out-file dist/bundle.js --source-maps"
+        "build": "babel src/index.js --out-file dist/bundle.js --source-maps",
+        "build:lib": "babel src/villax.js --out-file dist/villax.js --source-maps",
+        "watch": "babel src/index.js --watch --out-file dist/bundle.js --source-maps",
+        "dev": "npm run build && npm run serve",
+        "serve": "python3 -m http.server 8080"
     },
+    "keywords": [
+        "react",
+        "didact",
+        "educational",
+        "fiber",
+        "virtual-dom",
+        "hooks"
+    ],
+    "author": "Gabriel Villarinho",
+    "license": "MIT",
     "devDependencies": {
         "@babel/cli": "^7.23.0",
         "@babel/core": "^7.23.0",

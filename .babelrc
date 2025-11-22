@@ -8,5 +8,6 @@
                 "pragmaFrag": "Villax.Fragment"
             }
         ]
-    ]
+    ],
+    "plugins": []
 }
