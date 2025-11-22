@@ -22,39 +22,344 @@ function createTextElement(text) {
     }
 }
 
-function render(element, container) {
+function createDom(fiber) {
     const dom =
-        element.type === "TEXT_ELEMENT"
-            ? document.createTextNode("")
-            : document.createElement(element.type)
-
+        fiber.type === "TEXT_ELEMENT"
+            ? document.createTextNode(fiber.props.nodeValue || "")
+            : document.createElement(fiber.type)
 
     const isProperty = key => key !== "children"
-    Object.keys(element.props)
+    Object.keys(fiber.props)
         .filter(isProperty)
         .forEach(name => {
-            dom[name] = element.props[name]
+            if (name === "style" && typeof fiber.props.style === "string") {
+                dom.setAttribute("style", fiber.props.style)
+            } else if (name !== "nodeValue") {
+                dom[name] = fiber.props[name]
+            }
         })
 
-    element.props.children.forEach(child => {
-        render(child, dom)
-    });
+    return dom
+}
 
-    container.appendChild(dom)
+const isEvent = key => key.startsWith("on")
+const isProperty = key => key !== "children" && !isEvent(key)
+const isGone = (prev, next) => key => !(key in next)
+const isNew = (prev, next) => key => prev[key] !== next[key]
+
+function updateDom(dom, prevProps, nextProps) {
+    // Remove old or changed event listeners
+    Object.keys(prevProps)
+        .filter(isEvent)
+        .filter(
+            key =>
+                !(key in nextProps) ||
+                isNew(prevProps, nextProps)(key)
+        )
+        .forEach(name => {
+            const eventType = name
+                .toLowerCase()
+                .substring(2)
+            dom.removeEventListener(
+                eventType,
+                prevProps[name]
+            )
+        })
+
+    // remove old properties
+    Object.keys(prevProps)
+        .filter(isProperty)
+        .filter(isGone(prevProps, nextProps))
+        .forEach(name => {
+            dom[name] = ""
+        })
+
+    // Set new or changed properties
+    Object.keys(nextProps)
+        .filter(isProperty)
+        .filter(isNew(prevProps, nextProps))
+        .forEach(name => {
+            dom[name] = nextProps[name]
+        })
+
+    // Add event listeners
+    Object.keys(nextProps)
+        .filter(isEvent)
+        .filter(isNew(prevProps, nextProps))
+        .forEach(name => {
+            const eventType = name
+                .toLowerCase()
+                .substring(2)
+            dom.addEventListener(
+                eventType,
+                nextProps[name]
+            )
+        })
+}
+
+function commitRoot() {
+    deletions.forEach(commitWork)
+    commitWork(wipRoot.child)
+    currentRoot = wipRoot
+    wipRoot = null
+}
+
+function commitWork(fiber) {
+    if (!fiber) {
+        return
+    }
+
+    let domParentFiber = fiber.parent
+    while (!domParentFiber.dom) {
+        domParentFiber = domParentFiber.parent
+    }
+    const domParent = domParentFiber.dom
+
+    if (fiber.effectTag === "PLACEMENT" && fiber.dom != null) {
+        domParent.appendChild(fiber.dom)
+    } else if (fiber.effectTag === "DELETION") {
+        commitDeletion(fiber, domParent)
+    } else if (fiber.effectTag === "UPDATE" && fiber.dom != null) {
+        updateDom(
+            fiber.dom,
+            fiber.alternate.props,
+            fiber.props
+        )
+    }
+    commitWork(fiber.child)
+    commitWork(fiber.sibling)
+}
+
+function commitDeletion(fiber, domParent) {
+    if (fiber.dom) {
+        domParent.removeChild(fiber.dom)
+    } else {
+        commitDeletion(fiber.child, domParent)
+    }
+}
+
+function render(element, container) {
+    wipRoot = {
+        dom: container,
+        props: {
+            children: [element]
+        },
+        alternate: currentRoot
+    }
+
+    deletions = []
+    nextUnitOfWork = wipRoot
+}
+
+let currentRoot = null
+let nextUnitOfWork = null
+let wipRoot = null
+let deletions = []
+
+function workLoop(deadLine) {
+    let shouldYield = false
+    while (nextUnitOfWork && !shouldYield) {
+        nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
+        shouldYield = deadLine.timeRemaining() < 1
+    }
+
+    if (!nextUnitOfWork && wipRoot) {
+        commitRoot()
+    }
+
+    requestIdleCallback(workLoop)
+}
+
+requestIdleCallback(workLoop)
+
+function performUnitOfWork(fiber) {
+    const isFunctionComponent = fiber.type instanceof Function
+
+    if (isFunctionComponent) {
+        updateFunctionComponent(fiber)
+    } else {
+        updateHostComponent(fiber)
+    }
+
+    if (fiber.child) {
+        return fiber.child
+    }
+
+    let nextFiber = fiber
+    while (nextFiber) {
+        if (nextFiber.sibling) {
+            return nextFiber.sibling
+        }
+
+        nextFiber = nextFiber.parent
+    }
+}
+
+let wipFiber = null
+let hookIndex = null
+
+function updateFunctionComponent(fiber) {
+    wipFiber = fiber
+    hookIndex = 0
+    wipFiber.hooks = []
+    const children = [fiber.type(fiber.props)]
+    reconcileChildren(fiber, children)
+}
+
+function updateHostComponent(fiber) {
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+    const elements = fiber.props.children
+    reconcileChildren(fiber, elements)
+}
+
+function useState(initial) {
+    const oldHook =
+        wipFiber.alternate &&
+        wipFiber.alternate.hooks &&
+        wipFiber.alternate.hooks[hookIndex]
+
+    const hook = {
+        state: oldHook ? oldHook.state : initial,
+        queue: []
+    }
+
+    const actions = oldHook ? oldHook.queue : []
+    actions.forEach(action => {
+        hook.state = action(hook.state)
+    })
+
+    const setState = action => {
+        hook.queue.push(action)
+        wipRoot = {
+            dom: currentRoot.dom,
+            props: currentRoot.props,
+            alternate: currentRoot
+        }
+        nextUnitOfWork = wipRoot
+        deletions = []
+    }
+
+    wipFiber.hooks.push(hook)
+    hookIndex++
+    return [hook.state, setState]
+}
+
+function performUnitOfWork_old(fiber) {
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+
+    const elements = fiber.props.children
+    reconcileChildren(fiber, elements)
+
+}
+
+function reconcileChildren(wipFiber, elements) {
+    let index = 0
+    let oldFiber = wipFiber.alternate && wipFiber.alternate.child
+    let prevSibling = null
+
+    while (index < elements.length || oldFiber != null) {
+        const element = elements[index]
+        let newFiber = null
+
+        const sameType = oldFiber && element && element.type === oldFiber.type
+
+        if (sameType) {
+            newFiber = {
+                type: oldFiber.type,
+                props: element.props,
+                dom: oldFiber.dom,
+                parent: wipFiber,
+                alternate: oldFiber,
+                effectTag: "UPDATE"
+            }
+        }
+
+        if (element && !sameType) {
+            newFiber = {
+                type: element.type,
+                props: element.props,
+                dom: null,
+                parent: wipFiber,
+                alternate: null,
+                effectTag: "PLACEMENT"
+            }
+        }
+
+        if (oldFiber && !sameType) {
+            oldFiber.effectTag = "DELETION"
+            deletions.push(oldFiber)
+        }
+
+        if (oldFiber) {
+            oldFiber = oldFiber.sibling
+        }
+
+        if (index === 0) {
+            wipFiber.child = newFiber
+        } else {
+            prevSibling.sibling = newFiber
+        }
+
+        prevSibling = newFiber
+        index++
+    }
 }
 
 const Villax = {
     createElement,
-    render
+    render,
+    useState
 }
 
 /** @jsx Villax.createElement */
-const element = (
-    <div style="background: blue">
-        <h1>Hello World</h1>
-        <h2 style="text-align:right">from Villax</h2>
-    </div>
-);
+
+function Counter() {
+    const [count, setCount] = Villax.useState(0)
+    const [name, setName] = Villax.useState("Villax")
+
+    return (
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; color: white; font-family: Arial;">
+            <h1>Hello from {name}! 🚀</h1>
+            <h2>Count: {count}</h2>
+            <button onclick={() => setCount(c => c + 1)}>Increment</button>
+            <button onclick={() => setCount(c => c - 1)}>Decrement</button>
+            <button onclick={() => setCount(0)}>Reset</button>
+            <br />
+            <br />
+            <input
+                type="text"
+                value={name}
+                oninput={(e) => setName(e.target.value)}
+                placeholder="Type your name..."
+                style="padding: 10px; font-size: 16px; border-radius: 5px; border: none;"
+            />
+        </div>
+    )
+}
+
+function App() {
+    return (
+        <div>
+            <Counter />
+            <section style="padding: 20px;">
+                <h3>Villax Features:</h3>
+                <ul>
+                    <li>✅ JSX Support</li>
+                    <li>✅ Virtual DOM</li>
+                    <li>✅ Fiber Architecture</li>
+                    <li>✅ Reconciliation</li>
+                    <li>✅ Function Components</li>
+                    <li>✅ Hooks (useState)</li>
+                    <li>✅ Event Handlers</li>
+                </ul>
+            </section>
+        </div>
+    )
+}
 
 const container = document.getElementById("root");
-Villax.render(element, container);
+Villax.render(<App />, container);
