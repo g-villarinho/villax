@@ -2,7 +2,7 @@
 
 **Sua própria implementação do React do zero!**
 
-Este projeto é uma implementação completa e funcional do React, construída do zero seguindo o famoso tutorial ["Build Your Own React" de Rodrigo Pomber](https://pomb.us/build-your-own-react/). 
+Este projeto é uma implementação completa e funcional do React, construída do zero.
 
 ## Features Implementadas
 
@@ -34,6 +34,87 @@ Cada elemento é representado como uma "fiber" que contém:
 - `parent`, `child`, `sibling`: Links para navegação na árvore
 - `alternate`: Link para a fiber da renderização anterior
 - `effectTag`: Tipo de mudança (PLACEMENT, UPDATE, DELETION)
+
+#### Estrutura Hierárquica
+
+```mermaid
+graph TD
+    Root["Root Fiber<br/>(FunctionComponent)"]
+    
+    Root -->|child| Div["Div Fiber<br/>(host component)"]
+    
+    Div -->|child| H1["H1 Fiber<br/>(host component)"]
+    H1 -->|sibling| Button["Button Fiber<br/>(host component)"]
+    
+    Button -->|sibling| Span["Span Fiber<br/>(host component)"]
+    
+    H1 -->|parent| Div
+    Button -->|parent| Div
+    Span -->|parent| Div
+    
+    H1 -.->|sibling| Button
+    Button -.->|sibling| Span
+    
+    style Root fill:#4CAF50,color:#fff
+    style Div fill:#2196F3,color:#fff
+    style H1 fill:#FF9800,color:#fff
+    style Button fill:#FF9800,color:#fff
+    style Span fill:#FF9800,color:#fff
+```
+
+#### Fluxo de Renderização e Reconciliação
+
+```mermaid
+graph LR
+    A["JSX/createElement<br/>(Virtual Element)"]
+    B["Work Loop<br/>(requestIdleCallback)"]
+    C["Reconciliation<br/>(Diff Algorithm)"]
+    D["Effect Tags<br/>(PLACEMENT/UPDATE/DELETE)"]
+    E["Commit Phase<br/>(Apply to DOM)"]
+    F["Updated DOM"]
+    
+    A -->|input| B
+    B -->|iterate fibers| C
+    C -->|compare alternate| D
+    D -->|batch operations| E
+    E -->|mutations| F
+    
+    C -.->|next fiber| B
+    
+    style A fill:#E3F2FD,stroke:#1976D2
+    style B fill:#F3E5F5,stroke:#7B1FA2
+    style C fill:#FCE4EC,stroke:#C2185B
+    style D fill:#FFF3E0,stroke:#E65100
+    style E fill:#E8F5E9,stroke:#2E7D32
+    style F fill:#C8E6C9,stroke:#1B5E20
+```
+
+#### Ciclo de Vida de uma Fiber
+
+```mermaid
+graph TD
+    A["Fiber Criada"]
+    B["Render Phase<br/>(Effect Tags marcadas)"]
+    C["Pode ser Interrompida?"]
+    D["Commit Phase<br/>(Aplica ao DOM)"]
+    E["Cleanup & Alternate Update"]
+    F["Pronta para próximo Render"]
+    
+    A --> B
+    B --> C
+    C -->|Sim| B
+    C -->|Não| D
+    D --> E
+    E --> F
+    F -.->|atualização| B
+    
+    style A fill:#E0F2F1
+    style B fill:#B2DFDB
+    style C fill:#80CBC4
+    style D fill:#4DB6AC
+    style E fill:#26A69A
+    style F fill:#009688
+```
 
 ## Estrutura do Projeto
 
@@ -72,8 +153,7 @@ npm start
 npm run build       # Compilar projeto
 npm run build:lib   # Compilar apenas a lib
 npm run watch       # Modo watch
-npm run dev         # Build + servidor
-npm start           # Servidor HTTP (porta 8080) with watch mode
+npm run dev         # Servidor HTTP (porta 8080) with watch mode
 ```
 
 ## Exemplo de Código
@@ -137,19 +217,6 @@ Este projeto é perfeito para:
 - Ver como hooks funcionam "por baixo dos panos"
 - Estudar algoritmos de diff
 
-Leia o [DEVELOPMENT.md](./DEVELOPMENT.md) para um guia completo de desenvolvimento.
-
-## Contribuindo
-
-Este é um projeto educacional. Ideias para contribuir:
-- Adicionar mais hooks (useEffect, useReducer, useContext)
-- Implementar reconciliação por keys
-- Adicionar suporte a Fragments
-- Otimizar performance
-- Adicionar testes
-- Melhorar documentação
-- Criar mais exemplos
-
 ## Licença
 
 MIT - Sinta-se livre para usar este projeto para aprender!
@@ -160,7 +227,7 @@ Baseado no excelente tutorial ["Build Your Own React"](https://pomb.us/build-you
 
 ---
 
-**Feito com ❤️ para aprender como o React funciona internamente**
+**Feito S2 para aprender como o React funciona internamente**
 
 ⭐ Se este projeto te ajudou a entender React, considere dar uma estrela!
 
@@ -175,17 +242,6 @@ Baseado no excelente tutorial ["Build Your Own React"](https://pomb.us/build-you
 - Explorar um loop de renderização incremental inspirado em Fiber (versão minimalista).
 - Criar uma API enxuta de "hooks" (ex: `useState`, `useEffect`) para compreender coordenação de estado e efeitos.
 - Mapear limitações e apontar caminhos de evolução.
-
-## Escopo Inicial
-| Módulo | Descrição | Status |
-|--------|-----------|--------|
-| `createElement` | Criação de objetos de elemento + nós de texto | ✅ (em `index.js`)
-| `render(root, element)` | Montar a árvore no DOM real | ⏳
-| Reconciler | Comparar árvore anterior e nova | ⏳
-| Hooks (`useState`) | Estado por componente funcional | ⏳
-| Hooks (`useEffect`) | Efeitos pós-render | ⏳
-| Sistema de chave | Otimizar lista / reordenação | ⏳
-| Dev sandbox | Página de teste interativa | ⏳
 
 ## Arquitetura (Visão Geral)
 ```
@@ -243,12 +299,6 @@ No momento isso só cria estruturas JS; não há função de `render` ou ligaç�
 - Documentação oficial do React (arquitetura Fiber, hooks).
 - Artigos: "Didact" (mini React), posts sobre Virtual DOM e reconciler.
 - Código aberto de versões anteriores do React para estudo conceitual.
-
-## Contribuição
-Este projeto é estritamente para estudo pessoal, mas sugestões de melhoria conceitual são bem-vindas. Abra uma issue descrevendo:
-1. Problema / dúvida.
-2. Contexto do caso de uso.
-3. Proposta de solução ou recurso.
 
 ## Licença
 Este projeto está licenciado sob a **Licença MIT**.

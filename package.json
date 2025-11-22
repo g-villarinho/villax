@@ -6,9 +6,8 @@
     "scripts": {
         "build": "babel src --out-dir dist --source-maps",
         "watch": "babel src --watch --out-dir dist --source-maps",
-        "dev": "npm run build && npm run serve",
         "serve": "python3 -m http.server 8080",
-        "start": "npm run build && concurrently \"npm run watch\" \"npm run serve\""
+        "dev": "npm run build && concurrently \"npm run watch\" \"npm run serve\""
     },
     "keywords": [
         "react",
