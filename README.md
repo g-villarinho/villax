@@ -249,28 +249,6 @@ App (função) -> createElement() -> Virtual Node Tree -> Reconciler -> Patch DO
 ```
 Componentes funcionais retornam elementos (objetos). O reconciler calcula diferenças entre versão anterior e nova, gerando um conjunto mínimo de operações (criar, atualizar, remover nós). Em seguida, uma fase de "commit" aplica as mudanças ao DOM e dispara efeitos.
 
-## Exemplo Futuro (API Desejada)
-```js
-import { createElement, useState, render } from './villax'
-
-function Counter() {
-  const [count, setCount] = useState(0)
-  return createElement('div', null,
-    createElement('span', null, `Valor: ${count}`),
-    createElement('button', { onClick: () => setCount(count + 1) }, '+1')
-  )
-}
-
-render(createElement(Counter), document.getElementById('root'))
-```
-
-## Como Rodar (estado atual)
-Ainda não há bundler ou build. Apenas Node.
-```bash
-node index.js
-```
-No momento isso só cria estruturas JS; não há função de `render` ou ligação com o DOM. Para testar no navegador você poderá futuramente criar um `playground.html` e incluir o bundle.
-
 ## Roadmap Detalhado
 1. Renderização inicial (montagem completa sem diff).
 2. Introduzir diff por tipo (elemento diferente => recria ramo).
