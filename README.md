@@ -1,21 +1,21 @@
-# Villax 🚀
+# Villax
 
 **Sua própria implementação do React do zero!**
 
 Este projeto é uma implementação completa e funcional do React, construída do zero seguindo o famoso tutorial ["Build Your Own React" de Rodrigo Pomber](https://pomb.us/build-your-own-react/). 
 
-## ✨ Features Implementadas
+## Features Implementadas
 
-- ✅ **JSX Support** - Sintaxe JSX transformada via Babel
-- ✅ **Virtual DOM** - Representação em memória da árvore de elementos
-- ✅ **Fiber Architecture** - Arquitetura de fibras para trabalho incremental
-- ✅ **Concurrent Mode** - Renderização interruptível usando `requestIdleCallback`
-- ✅ **Reconciliation** - Algoritmo de diff para atualizar apenas o necessário
-- ✅ **Function Components** - Suporte completo a componentes funcionais
-- ✅ **Hooks** - Implementação do `useState` hook
-- ✅ **Event Handlers** - Sistema de eventos otimizado
+- ✅ JSX Support - Sintaxe JSX transformada via Babel
+- ✅ Virtual DOM - Representação em memória da árvore de elementos
+- ✅ Fiber Architecture - Arquitetura de fibras para trabalho incremental
+- ✅ Concurrent Mode - Renderização interruptível usando `requestIdleCallback`
+- ✅ Reconciliation - Algoritmo de diff para atualizar apenas o necessário
+- ✅ Function Components - Suporte completo a componentes funcionais
+- ✅ Hooks - Implementação do `useState` hook
+- ✅ Event Handlers - Sistema de eventos otimizado
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ### Como funciona?
 
@@ -35,7 +35,7 @@ Cada elemento é representado como uma "fiber" que contém:
 - `alternate`: Link para a fiber da renderização anterior
 - `effectTag`: Tipo de mudança (PLACEMENT, UPDATE, DELETION)
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 villax/
@@ -50,7 +50,7 @@ villax/
 └── DEVELOPMENT.md     # Guia de desenvolvimento
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Instalar dependências
@@ -63,20 +63,20 @@ npm run build
 open index.html
 
 # Ou usar servidor local
-npm run dev
+npm start
 ```
 
-## 📝 Scripts Disponíveis
+## Scripts Disponíveis
 
 ```bash
 npm run build       # Compilar projeto
 npm run build:lib   # Compilar apenas a lib
 npm run watch       # Modo watch
 npm run dev         # Build + servidor
-npm run serve       # Servidor HTTP (porta 8080)
+npm start           # Servidor HTTP (porta 8080) with watch mode
 ```
 
-## 💻 Exemplo de Código
+## Exemplo de Código
 
 ```jsx
 /** @jsx Villax.createElement */
@@ -101,7 +101,7 @@ Villax.render(<Counter />, container)
 
 Veja mais exemplos em [`examples/`](./examples).
 
-## 📚 O que aprendi
+## O que aprendi
 
 Este projeto ensina conceitos fundamentais de como o React funciona internamente:
 
@@ -111,7 +111,7 @@ Este projeto ensina conceitos fundamentais de como o React funciona internamente
 - **Rendering Pipeline**: As fases de render e commit
 - **Event System**: Como eventos são gerenciados eficientemente
 
-## 🎯 Diferenças do React Real
+## Diferenças do React Real
 
 Esta é uma versão didática. O React real inclui:
 - Otimizações de performance
@@ -122,13 +122,13 @@ Esta é uma versão didática. O React real inclui:
 - Portais, Suspense, Error Boundaries
 - E muito mais!
 
-## 📖 Referências
+## Referências
 
 - [Build Your Own React - Rodrigo Pomber](https://pomb.us/build-your-own-react/)
 - [React Fiber Architecture](https://github.com/acdlite/react-fiber-architecture)
 - [React Documentation](https://react.dev/)
 
-## 🎓 Para Estudar
+## Para Estudar
 
 Este projeto é perfeito para:
 - Entender como o React funciona internamente
@@ -139,22 +139,22 @@ Este projeto é perfeito para:
 
 Leia o [DEVELOPMENT.md](./DEVELOPMENT.md) para um guia completo de desenvolvimento.
 
-## 🤝 Contribuindo
+## Contribuindo
 
 Este é um projeto educacional. Ideias para contribuir:
-- ✨ Adicionar mais hooks (useEffect, useReducer, useContext)
-- 🔑 Implementar reconciliação por keys
-- 🧩 Adicionar suporte a Fragments
-- ⚡ Otimizar performance
-- 🧪 Adicionar testes
-- 📖 Melhorar documentação
-- 🎨 Criar mais exemplos
+- Adicionar mais hooks (useEffect, useReducer, useContext)
+- Implementar reconciliação por keys
+- Adicionar suporte a Fragments
+- Otimizar performance
+- Adicionar testes
+- Melhorar documentação
+- Criar mais exemplos
 
-## 📝 Licença
+## Licença
 
 MIT - Sinta-se livre para usar este projeto para aprender!
 
-## 🙏 Créditos
+## Créditos
 
 Baseado no excelente tutorial ["Build Your Own React"](https://pomb.us/build-your-own-react/) de [Rodrigo Pomber](https://twitter.com/pomber).
 

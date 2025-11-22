@@ -43,14 +43,14 @@ function FeatureList() {
         <section style="padding: 20px; max-width: 600px; margin: 0 auto;">
             <h3 style="color: #667eea; font-size: 24px;">Villax Features:</h3>
             <ul style="list-style: none; padding: 0;">
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ JSX Support</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Virtual DOM</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Fiber Architecture</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Reconciliation Algorithm</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Function Components</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Hooks (useState)</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Event Handlers</li>
-                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;">✅ Concurrent Mode</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> JSX Support</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Virtual DOM</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Fiber Architecture</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Reconciliation Algorithm</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Function Components</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Hooks (useState)</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Event Handlers</li>
+                <li style="padding: 10px; margin: 5px 0; background: #f5f5f5; border-radius: 5px;"> Concurrent Mode</li>
             </ul>
 
             <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">

@@ -7,7 +7,8 @@
         "build": "babel src --out-dir dist --source-maps",
         "watch": "babel src --watch --out-dir dist --source-maps",
         "dev": "npm run build && npm run serve",
-        "serve": "python3 -m http.server 8080"
+        "serve": "python3 -m http.server 8080",
+        "start": "npm run build && concurrently \"npm run watch\" \"npm run serve\""
     },
     "keywords": [
         "react",
@@ -22,6 +23,8 @@
     "devDependencies": {
         "@babel/cli": "^7.23.0",
         "@babel/core": "^7.23.0",
-        "@babel/preset-react": "^7.23.0"
+        "@babel/preset-react": "^7.23.0",
+        "concurrently": "^9.2.1",
+        "http-server": "^14.1.1"
     }
 }
