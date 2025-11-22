@@ -38,82 +38,54 @@ Cada elemento é representado como uma "fiber" que contém:
 #### Estrutura Hierárquica
 
 ```mermaid
+%%{init: {'theme': 'default'}}%%
 graph TD
     Root["Root Fiber<br/>(FunctionComponent)"]
+    Div["Div Fiber"]
+    Button["Button Fiber"]
+    Text["Text Fiber"]
     
-    Root -->|child| Div["Div Fiber<br/>(host component)"]
+    Root --> Div
+    Div --> Button
+    Div --> Text
     
-    Div -->|child| H1["H1 Fiber<br/>(host component)"]
-    H1 -->|sibling| Button["Button Fiber<br/>(host component)"]
-    
-    Button -->|sibling| Span["Span Fiber<br/>(host component)"]
-    
-    H1 -->|parent| Div
-    Button -->|parent| Div
-    Span -->|parent| Div
-    
-    H1 -.->|sibling| Button
-    Button -.->|sibling| Span
-    
-    style Root fill:#4CAF50,color:#fff
-    style Div fill:#2196F3,color:#fff
-    style H1 fill:#FF9800,color:#fff
-    style Button fill:#FF9800,color:#fff
-    style Span fill:#FF9800,color:#fff
+    Button -.sibling.-> Text
+    Button -.parent.-> Div
+    Div -.parent.-> Root
 ```
 
 #### Fluxo de Renderização e Reconciliação
 
 ```mermaid
+%%{init: {'theme': 'default'}}%%
 graph LR
     A["JSX/createElement<br/>(Virtual Element)"]
-    B["Work Loop<br/>(requestIdleCallback)"]
-    C["Reconciliation<br/>(Diff Algorithm)"]
-    D["Effect Tags<br/>(PLACEMENT/UPDATE/DELETE)"]
-    E["Commit Phase<br/>(Apply to DOM)"]
-    F["Updated DOM"]
+    B["Render Phase<br/>(Work Loop)"]
+    C["Reconciliation<br/>(Diff)"]
+    D["Effect Tags<br/>(PLACEMENT/UPDATE/DELETION)"]
+    E["Commit Phase<br/>(Apply DOM)"]
     
-    A -->|input| B
-    B -->|iterate fibers| C
-    C -->|compare alternate| D
-    D -->|batch operations| E
-    E -->|mutations| F
-    
-    C -.->|next fiber| B
-    
-    style A fill:#E3F2FD,stroke:#1976D2
-    style B fill:#F3E5F5,stroke:#7B1FA2
-    style C fill:#FCE4EC,stroke:#C2185B
-    style D fill:#FFF3E0,stroke:#E65100
-    style E fill:#E8F5E9,stroke:#2E7D32
-    style F fill:#C8E6C9,stroke:#1B5E20
+    A --> B
+    B --> C
+    C --> D
+    D --> E
 ```
 
 #### Ciclo de Vida de uma Fiber
 
 ```mermaid
+%%{init: {'theme': 'default'}}%%
 graph TD
     A["Fiber Criada"]
-    B["Render Phase<br/>(Effect Tags marcadas)"]
-    C["Pode ser Interrompida?"]
-    D["Commit Phase<br/>(Aplica ao DOM)"]
-    E["Cleanup & Alternate Update"]
-    F["Pronta para próximo Render"]
+    B["Render Phase<br/>(Pode ser interrompida)"]
+    C["Commit Phase<br/>(Não interruptível)"]
+    D["DOM Atualizado"]
+    E["Effects Executados"]
     
     A --> B
     B --> C
-    C -->|Sim| B
-    C -->|Não| D
+    C --> D
     D --> E
-    E --> F
-    F -.->|atualização| B
-    
-    style A fill:#E0F2F1
-    style B fill:#B2DFDB
-    style C fill:#80CBC4
-    style D fill:#4DB6AC
-    style E fill:#26A69A
-    style F fill:#009688
 ```
 
 ## Estrutura do Projeto
