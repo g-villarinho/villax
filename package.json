@@ -4,9 +4,8 @@
     "description": "A didactic React implementation - Build your own React from scratch",
     "main": "src/villax.js",
     "scripts": {
-        "build": "babel src/index.js --out-file dist/bundle.js --source-maps",
-        "build:lib": "babel src/villax.js --out-file dist/villax.js --source-maps",
-        "watch": "babel src/index.js --watch --out-file dist/bundle.js --source-maps",
+        "build": "babel src --out-dir dist --source-maps",
+        "watch": "babel src --watch --out-dir dist --source-maps",
         "dev": "npm run build && npm run serve",
         "serve": "python3 -m http.server 8080"
     },
